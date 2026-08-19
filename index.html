@@ -378,12 +378,26 @@
         <div id="tab-tambah" class="tab-content hidden">
             <div class="card admin-panel">
                 <p id="admin-status" style="margin:0 0 6px 0; font-size:0.8rem;">Status: <b>Viewer (Akses Terbatas)</b></p>
+                
+                <!-- SECTION LOGIN -->
                 <div id="login-section">
                     <input type="password" id="admin-pass" placeholder="Password Admin WO...">
                     <button class="btn" onclick="loginAdmin()">Login Admin</button>
                 </div>
+
+                <!-- SECTION LOGOUT & GANTI PASSWORD -->
                 <div id="logout-section" class="hidden">
-                    <button class="btn" style="background:#dc2626;" onclick="logoutAdmin()">Logout Admin</button>
+                    <div style="display:flex; gap:6px; margin-bottom:8px;">
+                        <button class="btn" style="background:#dc2626;" onclick="logoutAdmin()">Logout Admin</button>
+                        <button class="btn" style="background:#d97706;" onclick="toggleGantiPass()">⚙️ Ubah Password</button>
+                    </div>
+
+                    <!-- FORM UBAH PASSWORD -->
+                    <div id="change-pass-box" class="hidden" style="border-top: 1px dashed var(--admin-border); padding-top: 8px; margin-top: 8px;">
+                        <label style="font-size:0.75rem;"><b>Password Baru:</b></label>
+                        <input type="password" id="new-admin-pass" placeholder="Ketik password baru...">
+                        <button class="btn" style="background:#059669; padding:0.5rem;" onclick="simpanPasswordBaru()">Simpan Password Baru</button>
+                    </div>
                 </div>
             </div>
 
@@ -420,7 +434,7 @@
                     <label class="checkbox-item"><input type="checkbox" value="Catering" class="check-kelengkapan"> Catering</label>
                 </div>
 
-                <!-- HANYA ADMIN YANG BISA SEBABKAN / BUKA SEWA VALUE -->
+                <!-- HANYA ADMIN YANG BISA SEE / EDIT NILAI SEWA -->
                 <div id="admin-sewa-container" class="hidden">
                     <label style="font-size:0.8rem; color:#d97706;"><b>Nilai Sewa (Rp) [Khusus Admin]:</b></label>
                     <input type="number" id="input-nilai-sewa" placeholder="Contoh: 15000000" style="border-color:#f59e0b;">
@@ -469,7 +483,8 @@
     </div>
 
     <script>
-        const API_URL = "PASTE_URL_WEB_APP_DISINI"; 
+        // URL WEB APP GOOGLE APPS SCRIPT SUDAH DIGABUNGKAN
+        const API_URL = "https://script.google.com/macros/s/AKfycbwEcNb0KMgmpNLjqwjVR_h9D5SCBZDOSnxbygX8dLqI3LydHs4hBJmRZn4jWSTlW8_s/exec"; 
 
         let events = [];
         let photos = JSON.parse(localStorage.getItem('tresnomulyo_photos')) || [];
@@ -512,7 +527,7 @@
         }
 
         async function muatDataRealtime() {
-            if(!API_URL || API_URL === "PASTE_URL_WEB_APP_DISINI") {
+            if(!API_URL) {
                 renderCalendar();
                 return;
             }
@@ -548,9 +563,16 @@
             if(tabId === 'foto') renderGallery();
         }
 
+        // SISTEM AUTHENTIKASI PASS ADMIN
+        function getAdminPassword() {
+            return localStorage.getItem('tm_admin_pass') || 'tresnomulyo123';
+        }
+
         function loginAdmin() {
-            let pass = document.getElementById('admin-pass').value;
-            if(pass === 'tresnomulyo123') {
+            let passInput = document.getElementById('admin-pass').value;
+            let currentPass = getAdminPassword();
+
+            if(passInput === currentPass) {
                 isAdmin = true;
                 document.getElementById('admin-status').innerHTML = 'Status: <b style="color:#10b981;">Admin (Akses Penuh)</b>';
                 document.getElementById('login-section').classList.add('hidden');
@@ -571,9 +593,28 @@
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('logout-section').classList.add('hidden');
             document.getElementById('admin-sewa-container').classList.add('hidden');
+            document.getElementById('change-pass-box').classList.add('hidden');
+            document.getElementById('admin-pass').value = '';
             
             renderCalendar();
             renderOrder();
+        }
+
+        function toggleGantiPass() {
+            let box = document.getElementById('change-pass-box');
+            box.classList.toggle('hidden');
+        }
+
+        function simpanPasswordBaru() {
+            let newPass = document.getElementById('new-admin-pass').value;
+            if (!newPass) {
+                alert('Password baru tidak boleh kosong!');
+                return;
+            }
+            localStorage.setItem('tm_admin_pass', newPass);
+            alert('Password Admin berhasil diperbarui menjadi: ' + newPass);
+            document.getElementById('new-admin-pass').value = '';
+            toggleGantiPass();
         }
 
         function renderCalendar() {
@@ -672,29 +713,19 @@
                 lain: lain
             };
 
-            if (API_URL === "PASTE_URL_WEB_APP_DISINI") {
-                let existingIndex = events.findIndex(e => e.id == newEvent.id);
-                if (existingIndex > -1) events[existingIndex] = newEvent;
-                else events.push(newEvent);
-
-                alert('Event berhasil disimpan secara lokal!');
+            showLoading(true);
+            try {
+                await fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "ADD", data: newEvent })
+                });
+                await muatDataRealtime();
+                alert('Event berhasil disimpan ke Google Sheets!');
                 resetForm();
-                renderCalendar();
-            } else {
-                showLoading(true);
-                try {
-                    await fetch(API_URL, {
-                        method: "POST",
-                        body: JSON.stringify({ action: "ADD", data: newEvent })
-                    });
-                    await muatDataRealtime();
-                    alert('Event berhasil disimpan!');
-                    resetForm();
-                } catch (e) {
-                    alert("Gagal menyimpan ke database.");
-                } finally {
-                    showLoading(false);
-                }
+            } catch (e) {
+                alert("Gagal menyimpan ke database Google Sheets.");
+            } finally {
+                showLoading(false);
             }
 
             const firstCard = document.querySelector('.card-menu-1');
@@ -739,14 +770,6 @@
             if (!isAdmin) return;
             if (!confirm('Yakin ingin menghapus event ini?')) return;
 
-            if (API_URL === "PASTE_URL_WEB_APP_DISINI") {
-                events = events.filter(ev => ev.id != id);
-                renderCalendar();
-                renderOrder();
-                alert("Event dihapus.");
-                return;
-            }
-
             showLoading(true);
             try {
                 await fetch(API_URL, {
@@ -754,9 +777,9 @@
                     body: JSON.stringify({ action: "DELETE", id: id })
                 });
                 await muatDataRealtime();
-                alert("Event berhasil dihapus.");
+                alert("Event berhasil dihapus dari Google Sheets.");
             } catch (e) {
-                alert("Gagal menghapus.");
+                alert("Gagal menghapus event.");
             } finally {
                 showLoading(false);
             }
