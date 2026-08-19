@@ -515,11 +515,9 @@
         function parseLocalDate(dateInput) {
             if (!dateInput) return '';
             let str = String(dateInput).trim();
-            // Ambil bagian YYYY-MM-DD saja jika string berbentuk ISO (seperti 2026-08-21T17:00:00.000Z)
             if (str.includes('T')) {
                 str = str.split('T')[0];
             }
-            // Tangani format YYYY/MM/DD atau YYYY-MM-DD
             str = str.replace(/\//g, '-');
             let parts = str.split('-');
             if (parts.length === 3) {
@@ -531,7 +529,7 @@
             return str;
         }
 
-        // AMBIL PROPERTY TANGGAL MULAI DAN SELESAI SECARA AMAN DARI BERBAGAI NAMA HEDER
+        // AMBIL PROPERTY TANGGAL MULAI DAN SELESAI SECARA AMAN DARI BERBAGAI NAMA HEADER
         function getEventDates(ev) {
             let start = parseLocalDate(ev.tglMulai || ev.tgl_mulai || ev.tanggal || ev.Tanggal || '');
             let end = parseLocalDate(ev.tglSelesai || ev.tgl_selesai || ev.tanggalSelesai || ev.tglMulai || ev.tanggal || '');
@@ -539,7 +537,7 @@
             return { start, end };
         }
 
-        // MENGUBAH TANGGAL YYYY-MM-DD JADI FORMAT RAPI INDONESIA (Contoh: 21 Agu 2026)
+        // MENGUBAH TANGGAL YYYY-MM-DD JADI FORMAT RAPI INDONESIA
         function formatDisplayDate(dateStr) {
             let clean = parseLocalDate(dateStr);
             if (!clean || clean.length < 10) return dateStr || '-';
@@ -693,7 +691,8 @@
                             let { start, end } = getEventDates(activeEvent);
                             let rangeTxt = (start === end || !end) ? formatDisplayDate(start) : `${formatDisplayDate(start)} s/d ${formatDisplayDate(end)}`;
                             
-                            let infoMsg = `💍 Penyewa: ${activeEvent.penyewa || activeEvent.nama || '-'}\n📍 Alamat: ${activeEvent.alamat || '-'}\n📅 Tanggal: ${rangeTxt}\n📦 Kelengkapan: ${activeEvent.kelengkapan || '-'}\n📝 Catatan: ${activeEvent.lain || '-'}`;
+                            let rawK = activeEvent.kelengkapan || activeEvent.Kelengkapan || '-';
+                            let infoMsg = `💍 Penyewa: ${activeEvent.penyewa || activeEvent.nama || '-'}\n📍 Alamat: ${activeEvent.alamat || activeEvent.Alamat || '-'}\n📅 Tanggal: ${rangeTxt}\n📦 Kelengkapan: ${rawK}\n📝 Catatan: ${activeEvent.lain || activeEvent.Lain || '-'}`;
                             
                             if (isAdmin && activeEvent.nilaiSewa) {
                                 infoMsg += `\n💰 Nilai Sewa: Rp ${Number(activeEvent.nilaiSewa).toLocaleString()}`;
@@ -781,13 +780,21 @@
 
             document.getElementById('edit-id').value = ev.id;
             document.getElementById('input-penyewa').value = ev.penyewa || ev.nama || '';
-            document.getElementById('input-alamat').value = ev.alamat || '';
+            document.getElementById('input-alamat').value = ev.alamat || ev.Alamat || '';
             document.getElementById('input-tgl-mulai').value = start;
             document.getElementById('input-tgl-selesai').value = end;
             document.getElementById('input-nilai-sewa').value = ev.nilaiSewa || '';
-            document.getElementById('input-lain').value = ev.lain || '';
+            document.getElementById('input-lain').value = ev.lain || ev.Lain || '';
 
-            let listKelengkapan = ev.kelengkapan ? ev.kelengkapan.split(', ') : [];
+            let rawKelengkapan = ev.kelengkapan || ev.Kelengkapan || ev.kelengkapanEvent || '';
+            let listKelengkapan = [];
+            
+            if (Array.isArray(rawKelengkapan)) {
+                listKelengkapan = rawKelengkapan.map(s => String(s).trim());
+            } else if (typeof rawKelengkapan === 'string') {
+                listKelengkapan = rawKelengkapan.split(',').map(s => s.trim());
+            }
+
             document.querySelectorAll('.check-kelengkapan').forEach(cb => {
                 cb.checked = listKelengkapan.includes(cb.value);
             });
@@ -815,7 +822,7 @@
             }
         }
 
-        // DETAIL JADWAL ACARA
+        // DETAIL JADWAL ACARA (SUDAH DIPERBAIKI)
         function renderOrder() {
             let container = document.getElementById('list-order-detail');
             container.innerHTML = '';
@@ -831,14 +838,19 @@
 
                 let { start, end } = getEventDates(ev);
                 
-                // JIKA TANGGAL SAMA ATAU HANYA 1 HARI, TAMPILKAN 1 TANGGAL SAJA. JIKA BEDA TANGGAL, TAMPILKAN DARI S/D
                 let rangeDateText = (start === end || !end)
                     ? formatDisplayDate(start)
                     : `${formatDisplayDate(start)} s/d ${formatDisplayDate(end)}`;
 
-                let kelengkapanBadges = ev.kelengkapan 
-                    ? ev.kelengkapan.split(', ').map(k => `<span class="badge-tag">${k}</span>`).join('')
-                    : '-';
+                // MENGAMBIL DATA KELENGKAPAN SECARA FLEKSIBEL (STRING MAUPUN ARRAY)
+                let rawKelengkapan = ev.kelengkapan || ev.Kelengkapan || ev.kelengkapanEvent || '';
+                let kelengkapanBadges = '-';
+
+                if (Array.isArray(rawKelengkapan) && rawKelengkapan.length > 0) {
+                    kelengkapanBadges = rawKelengkapan.map(k => `<span class="badge-tag">${String(k).trim()}</span>`).join('');
+                } else if (typeof rawKelengkapan === 'string' && rawKelengkapan.trim() !== '') {
+                    kelengkapanBadges = rawKelengkapan.split(',').map(k => `<span class="badge-tag">${k.trim()}</span>`).join('');
+                }
 
                 let adminOnlySection = isAdmin ? `
                     <li style="color:#d97706;"><b>Nilai Sewa:</b> Rp ${ev.nilaiSewa ? Number(ev.nilaiSewa).toLocaleString() : '0'}</li>
@@ -854,9 +866,9 @@
                         <span style="font-weight:700; font-size:0.75rem; background:#f1f5f9; padding:4px 8px; border-radius:6px;">📅 ${rangeDateText}</span>
                     </div>
                     <ul style="padding-left:1rem; margin:0; font-size:0.8rem; line-height:1.5;">
-                        <li><b>Alamat Event:</b> ${ev.alamat || '-'}</li>
+                        <li><b>Alamat Event:</b> ${ev.alamat || ev.Alamat || '-'}</li>
                         <li><b>Kelengkapan:</b> <div style="margin-top:2px;">${kelengkapanBadges}</div></li>
-                        <li><b>Lain-lain / Catatan:</b> ${ev.lain || '-'}</li>
+                        <li><b>Lain-lain / Catatan:</b> ${ev.lain || ev.Lain || '-'}</li>
                         ${adminOnlySection}
                     </ul>
                 `;
