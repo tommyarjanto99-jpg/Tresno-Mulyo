@@ -417,6 +417,7 @@
                     <label class="checkbox-item"><input type="checkbox" value="Rias Keluarga" class="check-kelengkapan"> Rias Keluarga</label>
                     <label class="checkbox-item"><input type="checkbox" value="Hiburan" class="check-kelengkapan"> Hiburan</label>
                     <label class="checkbox-item"><input type="checkbox" value="Foto" class="check-kelengkapan"> Foto</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Catering" class="check-kelengkapan"> Catering</label>
                 </div>
 
                 <!-- HANYA ADMIN YANG BISA SEBABKAN / BUKA SEWA VALUE -->
@@ -491,7 +492,6 @@
             else loader.classList.add('hidden');
         }
 
-        // Format nama penyewa agar tetap muat 1 cell ringkas
         function persingkatNama(nama) {
             if (!nama) return 'Event';
             let words = nama.trim().split(' ');
@@ -613,7 +613,6 @@
                 dayNum.innerText = day;
                 cell.appendChild(dayNum);
 
-                // Cek event yang aktif di tanggal ini (dukungan sewa dari tgl A s/d tgl B)
                 let activeEvent = events.find(ev => {
                     let start = formatDateStandard(ev.tglMulai || ev.tanggal);
                     let end = formatDateStandard(ev.tglSelesai || ev.tanggal);
@@ -780,7 +779,6 @@
                     ? ev.kelengkapan.split(', ').map(k => `<span class="badge-tag">${k}</span>`).join('')
                     : '-';
 
-                // HANYA ADMIN YANG BISA LIHAT NILAI SEWA DAN TOMBOL EDIT/HAPUS
                 let adminOnlySection = isAdmin ? `
                     <li style="color:#d97706;"><b>Nilai Sewa:</b> Rp ${ev.nilaiSewa ? Number(ev.nilaiSewa).toLocaleString() : '0'}</li>
                     <div style="margin-top:8px; display:flex; gap:6px;">
