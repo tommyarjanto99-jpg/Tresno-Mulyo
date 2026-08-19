@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tresno Mulyo Wedding Organizer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #9f1239;
             --primary-hover: #881337;
-            --accent: #d97706;
             --bg: #fafaf9;
             --card: #ffffff;
             --text: #1c1917;
@@ -23,7 +22,6 @@
         body.dark-mode {
             --primary: #fb7185;
             --primary-hover: #f43f5e;
-            --accent: #fbbf24;
             --bg: #0c0a09;
             --card: #1c1917;
             --text: #f5f5f4;
@@ -66,15 +64,7 @@
             font-size: 1.3rem;
             font-weight: 800;
             letter-spacing: 2px;
-            text-transform: uppercase;
             color: #fef08a;
-        }
-
-        header p.slogan {
-            margin: 4px 0 0 0;
-            font-family: 'Great Vibes', cursive;
-            font-size: 1.4rem;
-            color: #ffffff;
         }
 
         .theme-toggle {
@@ -89,7 +79,6 @@
             cursor: pointer;
             font-size: 0.75rem;
             font-weight: 600;
-            backdrop-filter: blur(4px);
         }
 
         .dashboard-nav {
@@ -108,7 +97,6 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
             box-shadow: var(--card-shadow);
         }
 
@@ -134,11 +122,6 @@
         .card-menu-3.active { background: #d1fae5; border-color: #10b981; }
         .card-menu-4.active { background: #ede9fe; border-color: #8b5cf6; }
 
-        body.dark-mode .card-menu-1.active { background: #4c0519; }
-        body.dark-mode .card-menu-2.active { background: #451a03; }
-        body.dark-mode .card-menu-3.active { background: #064e3b; }
-        body.dark-mode .card-menu-4.active { background: #3b0764; }
-
         .nav-card .info .title { font-size: 0.8rem; font-weight: 700; display: block; }
         .nav-card .info .subtitle { font-size: 0.65rem; color: var(--text-muted); display: block; }
 
@@ -151,6 +134,7 @@
             border: 1px solid var(--border);
         }
 
+        /* KALENDER STYLE RINGKAS */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -192,7 +176,7 @@
 
         .calendar-day-cell {
             background: var(--card);
-            height: 68px;
+            height: 62px;
             padding: 3px;
             box-sizing: border-box;
             display: flex;
@@ -207,7 +191,7 @@
             font-size: 0.75rem;
             font-weight: 700;
             line-height: 1;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .calendar-day-cell.today .day-number {
@@ -220,18 +204,11 @@
             text-align: center;
         }
 
-        .chips-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        /* CELL BAR RINGKAS 1 CELL */
+        .event-chip-single {
             width: 100%;
-            overflow-y: auto;
-        }
-
-        .event-chip {
-            width: 100%;
-            font-size: 0.6rem;
-            padding: 2px 3px;
+            font-size: 0.62rem;
+            padding: 2px 4px;
             border-radius: 4px;
             font-weight: 700;
             text-align: center;
@@ -241,20 +218,32 @@
             box-sizing: border-box;
             cursor: pointer;
             color: white;
+            background: linear-gradient(135deg, #9f1239, #be123c);
         }
 
-        .chip-sound { background-color: #d97706; }
-        .chip-rias { background-color: #e11d48; }
-        .chip-dekor { background-color: #059669; }
-        .chip-paket { background-color: #7c3aed; }
+        /* CHECKBOX GRID KELENGKAPAN */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin: 0.4rem 0 0.8rem 0;
+            background: var(--bg);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
 
-        .badge-legend {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: white;
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin: 0;
         }
 
         input, select, textarea {
@@ -280,29 +269,24 @@
             font-weight: 700;
             width: 100%;
             font-size: 0.85rem;
-            transition: background 0.2s;
         }
 
-        button.btn:hover { background: var(--primary-hover); }
+        .btn-edit { background: #d97706; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+        .btn-delete { background: #dc2626; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
 
-        .btn-delete {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.6rem;
+        .badge-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 2px 6px;
             border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-top: 6px;
+            margin-right: 4px;
+            margin-bottom: 4px;
         }
 
-        .admin-panel {
-            background: var(--admin-bg);
-            border: 1px solid var(--admin-border);
-            border-radius: 12px;
-        }
-
+        .admin-panel { background: var(--admin-bg); border: 1px solid var(--admin-border); }
         .hidden { display: none; }
 
         .gallery-grid {
@@ -317,14 +301,6 @@
             object-fit: cover;
             border-radius: 8px;
         }
-
-        #loading-indicator {
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
     </style>
 </head>
 <body>
@@ -336,7 +312,7 @@
                 <span id="themeIcon">🌙</span> <span id="themeText">Dark</span>
             </button>
             <h2>TRESNO MULYO</h2>
-            <p class="slogan">Wedding Organizer & Decoration</p>
+            <p style="margin:2px 0 0 0; font-size:0.85rem;">Wedding Organizer & Decoration</p>
         </header>
 
         <div class="dashboard-nav">
@@ -352,28 +328,28 @@
                 <div class="icon-circle">➕</div>
                 <div class="info">
                     <span class="title">Tambah Event</span>
-                    <span class="subtitle">Input Job Order</span>
+                    <span class="subtitle">Input Booking</span>
                 </div>
             </div>
 
             <div class="nav-card card-menu-3" onclick="switchTab('order', this)">
                 <div class="icon-circle">📋</div>
                 <div class="info">
-                    <span class="title">Detail Layanan</span>
-                    <span class="subtitle">Filter per Layanan</span>
+                    <span class="title">Detail Jadwal</span>
+                    <span class="subtitle">Info Semua Acara</span>
                 </div>
             </div>
 
             <div class="nav-card card-menu-4" onclick="switchTab('foto', this)">
                 <div class="icon-circle">🖼️</div>
                 <div class="info">
-                    <span class="title">Galeri Karya</span>
-                    <span class="subtitle">Dokumentasi</span>
+                    <span class="title">Dokumentasi</span>
+                    <span class="subtitle">Foto Event</span>
                 </div>
             </div>
         </div>
 
-        <div id="loading-indicator" class="hidden">🔄 Synchronizing Data...</div>
+        <div id="loading-indicator" class="hidden" style="text-align:center; font-size:0.8rem; color:var(--primary);">🔄 Synchronizing Data...</div>
 
         <!-- TAB 1: KALENDER JADWAL -->
         <div id="tab-jadwal" class="tab-content">
@@ -396,90 +372,95 @@
                 
                 <div class="calendar-grid" id="calendar-body"></div>
             </div>
-            
-            <div class="card" style="padding: 0.6rem;">
-                <div style="font-size: 0.75rem; font-weight: 700; margin-bottom: 6px;">Kategori Layanan:</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <span class="badge-legend chip-sound">🔊 Sound System</span>
-                    <span class="badge-legend chip-rias">💄 Rias & Busana</span>
-                    <span class="badge-legend chip-dekor">🌸 Dekorasi</span>
-                    <span class="badge-legend chip-paket">👑 Paket Lengkap WO</span>
-                </div>
-            </div>
         </div>
 
-        <!-- TAB 2: TAMBAH JADWAL EVENT -->
+        <!-- TAB 2: TAMBAH EVENT -->
         <div id="tab-tambah" class="tab-content hidden">
             <div class="card admin-panel">
-                <p id="admin-status" style="margin:0; font-size:0.8rem;">Status: <b style="color:#10b981;">Admin (Bypass Mode - Tanpa Password)</b></p>
+                <p id="admin-status" style="margin:0 0 6px 0; font-size:0.8rem;">Status: <b>Viewer (Akses Terbatas)</b></p>
+                <div id="login-section">
+                    <input type="password" id="admin-pass" placeholder="Password Admin WO...">
+                    <button class="btn" onclick="loginAdmin()">Login Admin</button>
+                </div>
+                <div id="logout-section" class="hidden">
+                    <button class="btn" style="background:#dc2626;" onclick="logoutAdmin()">Logout Admin</button>
+                </div>
             </div>
 
-            <div id="form-admin-order" class="card" style="border:1px solid #10b981;">
-                <h3 style="color:#10b981; margin-top:0; font-size:1rem;">💍 Input Event Wedding Baru</h3>
+            <div id="form-admin-order" class="card">
+                <h3 id="form-title" style="color:var(--primary); margin-top:0; font-size:1rem;">💍 Input Event / Sewa Baru</h3>
                 
-                <label style="font-size:0.8rem;"><b>Kategori Layanan Utama:</b></label>
-                <select id="input-kategori">
-                    <option value="sound">Sound System</option>
-                    <option value="rias">Rias & Busana</option>
-                    <option value="dekor">Dekorasi</option>
-                    <option value="paket">Paket Lengkap WO</option>
-                </select>
+                <input type="hidden" id="edit-id">
 
-                <label style="font-size:0.8rem;"><b>Nama Pengantin / Klien:</b></label>
-                <input type="text" id="input-klien" placeholder="Contoh: Rina & Budi">
+                <label style="font-size:0.8rem;"><b>Nama Penyewa / Klien:</b></label>
+                <input type="text" id="input-penyewa" placeholder="Contoh: Rina & Budi">
 
-                <label style="font-size:0.8rem;"><b>Tanggal Event:</b></label>
-                <input type="date" id="input-tanggal">
+                <label style="font-size:0.8rem;"><b>Alamat Event:</b></label>
+                <input type="text" id="input-alamat" placeholder="Contoh: Gedung Cendrawasih / Desa Sukamaju">
 
-                <label style="font-size:0.8rem;"><b>Lokasi / Gedung / Alamat:</b></label>
-                <input type="text" id="input-lokasi" placeholder="Contoh: Gedung Serbaguna / Desa X">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                    <div>
+                        <label style="font-size:0.8rem;"><b>Dari Tanggal:</b></label>
+                        <input type="date" id="input-tgl-mulai">
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem;"><b>Sampai Tanggal:</b></label>
+                        <input type="date" id="input-tgl-selesai">
+                    </div>
+                </div>
 
-                <label style="font-size:0.8rem;"><b>Jam Acara:</b></label>
-                <input type="time" id="input-jam">
+                <label style="font-size:0.8rem;"><b>Kelengkapan Event:</b></label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" value="Sound System" class="check-kelengkapan"> Sound System</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Dekorasi" class="check-kelengkapan"> Dekorasi</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Rias Manten" class="check-kelengkapan"> Rias Manten</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Rias Keluarga" class="check-kelengkapan"> Rias Keluarga</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Hiburan" class="check-kelengkapan"> Hiburan</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Foto" class="check-kelengkapan"> Foto</label>
+                </div>
 
-                <label style="font-size:0.8rem;"><b>Nilai Kontrak (Rp):</b></label>
-                <input type="number" id="input-harga" placeholder="Contoh: 15000000">
+                <!-- HANYA ADMIN YANG BISA SEBABKAN / BUKA SEWA VALUE -->
+                <div id="admin-sewa-container" class="hidden">
+                    <label style="font-size:0.8rem; color:#d97706;"><b>Nilai Sewa (Rp) [Khusus Admin]:</b></label>
+                    <input type="number" id="input-nilai-sewa" placeholder="Contoh: 15000000" style="border-color:#f59e0b;">
+                </div>
 
-                <label style="font-size:0.8rem;"><b>Detail Layanan & Catatan:</b></label>
-                <textarea id="input-catatan" placeholder="Detail paket, tema warna dekorasi, permintaan khusus..."></textarea>
+                <label style="font-size:0.8rem;"><b>Lain-lain / Catatan Tambahan:</b></label>
+                <textarea id="input-lain" placeholder="Request khusus, jam acara, atau rincian tambahan..."></textarea>
 
-                <button class="btn" style="background:#10b981;" onclick="simpanData()">Simpan Event</button>
+                <button class="btn" onclick="simpanData()">Simpan Event</button>
             </div>
         </div>
 
-        <!-- TAB 3: DETAIL ORDER -->
+        <!-- TAB 3: DETAIL JADWAL -->
         <div id="tab-order" class="tab-content hidden">
             <div class="card">
-                <h3 style="margin-top:0; font-size:1rem;">📋 Daftar Event per Layanan</h3>
-                <label style="font-size:0.8rem;"><b>Filter Layanan:</b></label>
-                <select id="filter-kategori" onchange="renderOrder()">
-                    <option value="semua">Semua Layanan</option>
-                    <option value="sound">Sound System</option>
-                    <option value="rias">Rias & Busana</option>
-                    <option value="dekor">Dekorasi</option>
-                    <option value="paket">Paket Lengkap WO</option>
-                </select>
-                <div id="list-order-detail" style="margin-top: 0.5rem;"></div>
+                <h3 style="margin-top:0; font-size:1rem;">📋 Detail Jadwal Event</h3>
+                <div id="list-order-detail"></div>
             </div>
         </div>
 
-        <!-- TAB 4: GALERI KARYA -->
+        <!-- TAB 4: DOKUMENTASI -->
         <div id="tab-foto" class="tab-content hidden">
             <div class="card">
-                <h3 style="margin-top:0; font-size:1rem;">🖼️ Galeri Dokumentasi Acara</h3>
-                <div id="form-foto-admin" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem;">
-                    <label style="font-size:0.8rem;"><b>Kategori Foto:</b></label>
-                    <select id="foto-kategori">
-                        <option value="dekor">Dekorasi</option>
-                        <option value="rias">Rias & MUA</option>
-                        <option value="sound">Sound System / Lighting</option>
-                    </select>
-                    <label style="font-size:0.8rem;"><b>Upload Foto Karya:</b></label>
-                    <input type="file" id="input-file-foto" accept="image/*">
-                    <label style="font-size:0.8rem;"><b>Keterangan Photo:</b></label>
-                    <input type="text" id="ket-foto" placeholder="Contoh: Modern Rustic Concept - Rina & Budi">
-                    <button class="btn" onclick="uploadFoto()">Unggah Dokumentasi</button>
+                <h3 style="margin-top:0; font-size:1rem;">🖼️ Tambah Dokumentasi Acara</h3>
+                <div style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem;">
+                    <label style="font-size:0.8rem;"><b>Nama Event / Penyewa:</b></label>
+                    <input type="text" id="doc-nama" placeholder="Contoh: Pernikahan Rina & Budi">
+
+                    <label style="font-size:0.8rem;"><b>Tanggal Event:</b></label>
+                    <input type="date" id="doc-tanggal">
+
+                    <label style="font-size:0.8rem;"><b>Lokasi Event:</b></label>
+                    <input type="text" id="doc-lokasi" placeholder="Contoh: Gedung Cendrawasih">
+
+                    <label style="font-size:0.8rem;"><b>Upload Foto Dokumentasi:</b></label>
+                    <input type="file" id="doc-file" accept="image/*">
+
+                    <button class="btn" style="margin-top: 6px;" onclick="uploadDokumentasi()">Simpan Dokumentasi</button>
                 </div>
+
+                <h4 style="margin:1rem 0 0.5rem 0; font-size:0.9rem;">Galeri Foto Dokumentasi</h4>
                 <div class="gallery-grid" id="gallery-container"></div>
             </div>
         </div>
@@ -491,7 +472,7 @@
 
         let events = [];
         let photos = JSON.parse(localStorage.getItem('tresnomulyo_photos')) || [];
-        let isAdmin = true; // Langsung aktif sebagai admin tanpa password
+        let isAdmin = false; 
         let currentDate = new Date();
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -510,16 +491,20 @@
             else loader.classList.add('hidden');
         }
 
+        // Format nama penyewa agar tetap muat 1 cell ringkas
+        function persingkatNama(nama) {
+            if (!nama) return 'Event';
+            let words = nama.trim().split(' ');
+            if (words.length === 1) {
+                return words[0].length > 8 ? words[0].substring(0, 7) + '..' : words[0];
+            }
+            return words.map(w => w[0].toUpperCase() + '.').join('');
+        }
+
         function formatDateStandard(dateStr) {
             if (!dateStr) return '';
             let d = new Date(dateStr);
-            if (isNaN(d.getTime())) {
-                let parts = dateStr.split('-');
-                if (parts.length === 3) {
-                    return `${parts[0]}-${String(parts[1]).padStart(2, '0')}-${String(parts[2]).padStart(2, '0')}`;
-                }
-                return dateStr;
-            }
+            if (isNaN(d.getTime())) return dateStr;
             let year = d.getFullYear();
             let month = String(d.getMonth() + 1).padStart(2, '0');
             let day = String(d.getDate()).padStart(2, '0');
@@ -563,6 +548,34 @@
             if(tabId === 'foto') renderGallery();
         }
 
+        function loginAdmin() {
+            let pass = document.getElementById('admin-pass').value;
+            if(pass === 'tresnomulyo123') {
+                isAdmin = true;
+                document.getElementById('admin-status').innerHTML = 'Status: <b style="color:#10b981;">Admin (Akses Penuh)</b>';
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('logout-section').classList.remove('hidden');
+                document.getElementById('admin-sewa-container').classList.remove('hidden');
+                
+                renderCalendar();
+                renderOrder();
+                alert('Berhasil Login Admin!');
+            } else {
+                alert('Password Salah!');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('admin-status').innerHTML = 'Status: <b>Viewer (Akses Terbatas)</b>';
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('logout-section').classList.add('hidden');
+            document.getElementById('admin-sewa-container').classList.add('hidden');
+            
+            renderCalendar();
+            renderOrder();
+        }
+
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -593,37 +606,35 @@
                     cell.classList.add('today');
                 }
 
-                let targetDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                let currentCellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
                 let dayNum = document.createElement('span');
                 dayNum.className = 'day-number';
                 dayNum.innerText = day;
                 cell.appendChild(dayNum);
 
-                let dayEvents = events.filter(ev => formatDateStandard(ev.tanggal) === targetDateStr);
+                // Cek event yang aktif di tanggal ini (dukungan sewa dari tgl A s/d tgl B)
+                let activeEvent = events.find(ev => {
+                    let start = formatDateStandard(ev.tglMulai || ev.tanggal);
+                    let end = formatDateStandard(ev.tglSelesai || ev.tanggal);
+                    return currentCellDateStr >= start && currentCellDateStr <= end;
+                });
 
-                if (dayEvents.length > 0) {
-                    let chipsWrapper = document.createElement('div');
-                    chipsWrapper.className = 'chips-wrapper';
-
-                    dayEvents.forEach(ev => {
-                        let kat = ev.kategori || 'paket';
-                        let chip = document.createElement('div');
-                        chip.className = `event-chip chip-${kat}`;
-                        chip.innerText = ev.klien || 'Event';
+                if (activeEvent) {
+                    let chip = document.createElement('div');
+                    chip.className = 'event-chip-single';
+                    chip.innerText = persingkatNama(activeEvent.penyewa);
+                    
+                    chip.onclick = (e) => {
+                        e.stopPropagation();
+                        let infoMsg = `💍 Penyewa: ${activeEvent.penyewa || '-'}\n📍 Alamat: ${activeEvent.alamat || '-'}\n📅 Tanggal: ${activeEvent.tglMulai} s/d ${activeEvent.tglSelesai}\n📦 Kelengkapan: ${activeEvent.kelengkapan || '-'}\n📝 Lain-lain: ${activeEvent.lain || '-'}`;
                         
-                        chip.onclick = (e) => {
-                            e.stopPropagation();
-                            if (confirm(`Hapus jadwal acara ${ev.klien}?`)) {
-                                hapusEvent(ev.id);
-                            } else {
-                                alert(`💍 Klien: ${ev.klien || '-'}\n📌 Layanan: ${kat.toUpperCase()}\n📅 Tanggal: ${ev.tanggal}\n📍 Lokasi: ${ev.lokasi || '-'}\n⏰ Jam: ${ev.jam || '-'}\n💰 Kontrak: Rp ${ev.harga ? Number(ev.harga).toLocaleString() : '0'}\n📝 Catatan: ${ev.catatan || '-'}`);
-                            }
-                        };
-                        chipsWrapper.appendChild(chip);
-                    });
-
-                    cell.appendChild(chipsWrapper);
+                        if (isAdmin && activeEvent.nilaiSewa) {
+                            infoMsg += `\n💰 Nilai Sewa: Rp ${Number(activeEvent.nilaiSewa).toLocaleString()}`;
+                        }
+                        alert(infoMsg);
+                    };
+                    cell.appendChild(chip);
                 }
 
                 calendarBody.appendChild(cell);
@@ -634,27 +645,41 @@
         function nextMonth() { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); }
 
         async function simpanData() {
-            let inputDate = document.getElementById('input-tanggal').value;
-            let newEvent = {
-                id: Date.now(),
-                kategori: document.getElementById('input-kategori').value,
-                klien: document.getElementById('input-klien').value,
-                tanggal: formatDateStandard(inputDate),
-                lokasi: document.getElementById('input-lokasi').value,
-                jam: document.getElementById('input-jam').value,
-                harga: document.getElementById('input-harga').value,
-                catatan: document.getElementById('input-catatan').value
-            };
+            let penyewa = document.getElementById('input-penyewa').value;
+            let alamat = document.getElementById('input-alamat').value;
+            let tglMulai = document.getElementById('input-tgl-mulai').value;
+            let tglSelesai = document.getElementById('input-tgl-selesai').value || tglMulai;
+            let nilaiSewa = document.getElementById('input-nilai-sewa').value;
+            let lain = document.getElementById('input-lain').value;
 
-            if(!newEvent.tanggal) {
-                alert('Silakan pilih tanggal event!');
+            let kelengkapanArr = [];
+            document.querySelectorAll('.check-kelengkapan:checked').forEach(cb => {
+                kelengkapanArr.push(cb.value);
+            });
+
+            if (!penyewa || !tglMulai) {
+                alert('Nama Penyewa dan Tanggal Mulai Wajib Diisi!');
                 return;
             }
 
-            if(API_URL === "PASTE_URL_WEB_APP_DISINI") {
-                // Mode uji coba tampilan lokal sebelum database dipasang
-                events.push(newEvent);
-                alert('Event berhasil ditambahkan secara lokal (Mode Uji Coba Tampilan)!');
+            let newEvent = {
+                id: document.getElementById('edit-id').value || Date.now(),
+                penyewa: penyewa,
+                alamat: alamat,
+                tglMulai: formatDateStandard(tglMulai),
+                tglSelesai: formatDateStandard(tglSelesai),
+                kelengkapan: kelengkapanArr.join(', '),
+                nilaiSewa: nilaiSewa,
+                lain: lain
+            };
+
+            if (API_URL === "PASTE_URL_WEB_APP_DISINI") {
+                let existingIndex = events.findIndex(e => e.id == newEvent.id);
+                if (existingIndex > -1) events[existingIndex] = newEvent;
+                else events.push(newEvent);
+
+                alert('Event berhasil disimpan secara lokal!');
+                resetForm();
                 renderCalendar();
             } else {
                 showLoading(true);
@@ -664,28 +689,62 @@
                         body: JSON.stringify({ action: "ADD", data: newEvent })
                     });
                     await muatDataRealtime();
-                    alert('Event berhasil disimpan ke database!');
+                    alert('Event berhasil disimpan!');
+                    resetForm();
                 } catch (e) {
                     alert("Gagal menyimpan ke database.");
                 } finally {
                     showLoading(false);
                 }
             }
-            
-            document.getElementById('input-klien').value = '';
-            document.getElementById('input-lokasi').value = '';
-            document.getElementById('input-harga').value = '';
-            document.getElementById('input-catatan').value = '';
-            
+
             const firstCard = document.querySelector('.card-menu-1');
             switchTab('jadwal', firstCard);
         }
 
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('input-penyewa').value = '';
+            document.getElementById('input-alamat').value = '';
+            document.getElementById('input-tgl-mulai').value = '';
+            document.getElementById('input-tgl-selesai').value = '';
+            document.getElementById('input-nilai-sewa').value = '';
+            document.getElementById('input-lain').value = '';
+            document.querySelectorAll('.check-kelengkapan').forEach(cb => cb.checked = false);
+            document.getElementById('form-title').innerText = '💍 Input Event / Sewa Baru';
+        }
+
+        function prepareEdit(id) {
+            let ev = events.find(e => e.id == id);
+            if (!ev) return;
+
+            document.getElementById('edit-id').value = ev.id;
+            document.getElementById('input-penyewa').value = ev.penyewa || '';
+            document.getElementById('input-alamat').value = ev.alamat || '';
+            document.getElementById('input-tgl-mulai').value = ev.tglMulai || '';
+            document.getElementById('input-tgl-selesai').value = ev.tglSelesai || '';
+            document.getElementById('input-nilai-sewa').value = ev.nilaiSewa || '';
+            document.getElementById('input-lain').value = ev.lain || '';
+
+            let listKelengkapan = ev.kelengkapan ? ev.kelengkapan.split(', ') : [];
+            document.querySelectorAll('.check-kelengkapan').forEach(cb => {
+                cb.checked = listKelengkapan.includes(cb.value);
+            });
+
+            document.getElementById('form-title').innerText = '✏️ Edit Event / Sewa';
+            const secondCard = document.querySelector('.card-menu-2');
+            switchTab('tambah', secondCard);
+        }
+
         async function hapusEvent(id) {
-            if(API_URL === "PASTE_URL_WEB_APP_DISINI") {
-                events = events.filter(ev => ev.id !== id);
+            if (!isAdmin) return;
+            if (!confirm('Yakin ingin menghapus event ini?')) return;
+
+            if (API_URL === "PASTE_URL_WEB_APP_DISINI") {
+                events = events.filter(ev => ev.id != id);
                 renderCalendar();
-                alert("Event dihapus dari memori lokal.");
+                renderOrder();
+                alert("Event dihapus.");
                 return;
             }
 
@@ -705,63 +764,76 @@
         }
 
         function renderOrder() {
-            let filter = document.getElementById('filter-kategori').value;
             let container = document.getElementById('list-order-detail');
             container.innerHTML = '';
 
-            let filtered = filter === 'semua' ? events : events.filter(ev => ev.kategori === filter);
-
-            if(filtered.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Tidak ada jadwal event untuk kategori ini.</p>';
+            if (events.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Belum ada jadwal acara.</p>';
                 return;
             }
 
-            filtered.forEach(ev => {
+            events.forEach(ev => {
                 let div = document.createElement('div');
                 div.className = 'card';
-                let kat = ev.kategori || 'paket';
+
+                let kelengkapanBadges = ev.kelengkapan 
+                    ? ev.kelengkapan.split(', ').map(k => `<span class="badge-tag">${k}</span>`).join('')
+                    : '-';
+
+                // HANYA ADMIN YANG BISA LIHAT NILAI SEWA DAN TOMBOL EDIT/HAPUS
+                let adminOnlySection = isAdmin ? `
+                    <li style="color:#d97706;"><b>Nilai Sewa:</b> Rp ${ev.nilaiSewa ? Number(ev.nilaiSewa).toLocaleString() : '0'}</li>
+                    <div style="margin-top:8px; display:flex; gap:6px;">
+                        <button class="btn-edit" onclick="prepareEdit('${ev.id}')">✏️ Edit</button>
+                        <button class="btn-delete" onclick="hapusEvent('${ev.id}')">🗑️ Hapus</button>
+                    </div>
+                ` : '';
 
                 div.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                        <span class="badge-legend chip-${kat}">${kat.toUpperCase()}</span>
-                        <span style="font-weight:700; font-size:0.8rem;">📅 ${formatDateStandard(ev.tanggal)}</span>
+                        <span style="font-weight:800; font-size:0.9rem; color:var(--primary);">${ev.penyewa || '-'}</span>
+                        <span style="font-weight:700; font-size:0.75rem;">📅 ${ev.tglMulai} ${ev.tglSelesai && ev.tglSelesai !== ev.tglMulai ? 's/d ' + ev.tglSelesai : ''}</span>
                     </div>
                     <ul style="padding-left:1rem; margin:0; font-size:0.8rem; line-height:1.5;">
-                        <li><b>Klien / Pengantin:</b> ${ev.klien || '-'}</li>
-                        <li><b>Lokasi / Gedung:</b> ${ev.lokasi || '-'}</li>
-                        <li><b>Jam Acara:</b> ${ev.jam || '-'}</li>
-                        <li><b>Nilai Kontrak:</b> Rp ${ev.harga ? Number(ev.harga).toLocaleString() : '0'}</li>
-                        <li><b>Catatan / Request:</b> ${ev.catatan || '-'}</li>
+                        <li><b>Alamat Event:</b> ${ev.alamat || '-'}</li>
+                        <li><b>Kelengkapan:</b> <div style="margin-top:2px;">${kelengkapanBadges}</div></li>
+                        <li><b>Lain-lain / Catatan:</b> ${ev.lain || '-'}</li>
+                        ${adminOnlySection}
                     </ul>
-                    <button class="btn-delete" onclick="hapusEvent(${ev.id})">🗑️ Hapus Event</button>
                 `;
                 container.appendChild(div);
             });
         }
 
-        function uploadFoto() {
-            let fileInput = document.getElementById('input-file-foto');
-            let kat = document.getElementById('foto-kategori').value;
-            let ket = document.getElementById('ket-foto').value;
+        function uploadDokumentasi() {
+            let nama = document.getElementById('doc-nama').value;
+            let tanggal = document.getElementById('doc-tanggal').value;
+            let lokasi = document.getElementById('doc-lokasi').value;
+            let fileInput = document.getElementById('doc-file');
 
-            if(fileInput.files.length === 0) {
-                alert('Pilih foto terlebih dahulu!');
+            if (!nama || fileInput.files.length === 0) {
+                alert('Nama Event dan Foto Wajib Diisi!');
                 return;
             }
 
             let reader = new FileReader();
             reader.onload = function(e) {
                 let newPhoto = {
-                    kategori: kat,
-                    url: e.target.result,
-                    keterangan: ket
+                    nama: nama,
+                    tanggal: formatDateStandard(tanggal),
+                    lokasi: lokasi,
+                    url: e.target.result
                 };
                 photos.push(newPhoto);
                 localStorage.setItem('tresnomulyo_photos', JSON.stringify(photos));
-                alert('Foto berhasil diunggah!');
-                renderGallery();
-                document.getElementById('ket-foto').value = '';
+                alert('Dokumentasi berhasil ditambahkan!');
+                
+                document.getElementById('doc-nama').value = '';
+                document.getElementById('doc-tanggal').value = '';
+                document.getElementById('doc-lokasi').value = '';
                 fileInput.value = '';
+                
+                renderGallery();
             }
             reader.readAsDataURL(fileInput.files[0]);
         }
@@ -769,20 +841,20 @@
         function renderGallery() {
             let container = document.getElementById('gallery-container');
             container.innerHTML = '';
-            if(photos.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Belum ada foto dokumentasi.</p>';
+            if (photos.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Belum ada dokumentasi acara.</p>';
                 return;
             }
             photos.forEach(p => {
                 let div = document.createElement('div');
                 div.className = 'gallery-item card';
-                let kat = p.kategori || 'dekor';
 
                 div.innerHTML = `
                     <img src="${p.url}">
                     <div style="margin-top:4px;">
-                        <span class="badge-legend chip-${kat}">${kat.toUpperCase()}</span>
-                        <p style="font-size:0.75rem; margin:2px 0 0 0;">${p.keterangan || ''}</p>
+                        <b style="font-size:0.8rem; display:block;">${p.nama}</b>
+                        <span style="font-size:0.7rem; color:var(--text-muted); display:block;">📅 ${p.tanggal || '-'}</span>
+                        <span style="font-size:0.7rem; color:var(--text-muted); display:block;">📍 ${p.lokasi || '-'}</span>
                     </div>
                 `;
                 container.appendChild(div);
